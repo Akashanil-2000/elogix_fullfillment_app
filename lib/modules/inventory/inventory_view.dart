@@ -140,12 +140,12 @@ class InventoryView extends GetView<InventoryController> {
         scrollDirection: Axis.horizontal,
         child: Row(
           children: [
-            _buildFilterChip(label: 'All', value: InventoryFilter.all),
             _buildFilterChip(label: 'In Stock', value: InventoryFilter.inStock),
             _buildFilterChip(
               label: 'Out of Stock',
               value: InventoryFilter.outOfStock,
             ),
+            _buildFilterChip(label: 'Reorder', value: InventoryFilter.reorder),
           ],
         ),
       ),

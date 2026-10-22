@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'inventory_service.dart';
 import 'models/product_sku_model.dart';
 
-enum InventoryFilter { all, inStock, outOfStock }
+enum InventoryFilter { inStock, outOfStock, reorder }
 
 class InventoryController extends GetxController {
   final InventoryService _service = InventoryService();
@@ -17,7 +17,7 @@ class InventoryController extends GetxController {
 
   final searchText = ''.obs;
 
-  final selectedFilter = InventoryFilter.all.obs;
+  final selectedFilter = InventoryFilter.inStock.obs;
 
   final TextEditingController searchController = TextEditingController();
 
@@ -79,14 +79,14 @@ class InventoryController extends GetxController {
 
           // Stock filter
           switch (selectedFilter.value) {
-            case InventoryFilter.all:
-              return true;
-
             case InventoryFilter.inStock:
-              return product.localQty > 0;
+              return product.localQty > product.reorderQty;
 
             case InventoryFilter.outOfStock:
-              return product.localQty <= 0;
+              return product.localQty == 0 && product.reorderQty == 0;
+
+            case InventoryFilter.reorder:
+              return product.reorderQty > product.localQty;
           }
         }).toList();
 

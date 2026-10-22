@@ -5,6 +5,31 @@ import '../../core/constants/api_constants.dart';
 class AuthService {
   final Dio _dio = Dio();
 
+  Future<EmailValidationResult> validateEmail({required String email}) async {
+    final response = await _dio.post(
+      '${ApiConstants.baseUrl}/app/api/user_valid',
+      data: {'email': email.trim()},
+    );
+
+    final data = response.data;
+
+    if (data is! Map) {
+      throw Exception('Invalid server response');
+    }
+
+    final result = data['result'];
+
+    if (result is! Map) {
+      throw Exception('Invalid email validation response');
+    }
+
+    return EmailValidationResult(
+      success: result['success'] == true,
+      message: result['message']?.toString() ?? 'Unable to validate email',
+      name: result['data'] is Map ? result['data']['name']?.toString() : null,
+    );
+  }
+
   Future<int?> login({
     required String username,
     required String password,
@@ -24,7 +49,6 @@ class AuthService {
     );
 
     final data = response.data;
-
     final result = data['result'];
 
     if (result is int) {
@@ -37,4 +61,16 @@ class AuthService {
 
     return null;
   }
+}
+
+class EmailValidationResult {
+  final bool success;
+  final String message;
+  final String? name;
+
+  const EmailValidationResult({
+    required this.success,
+    required this.message,
+    this.name,
+  });
 }

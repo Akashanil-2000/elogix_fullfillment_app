@@ -56,7 +56,7 @@ class SplashView extends GetView<SplashController> {
                 child: Transform.translate(
                   offset: Offset(0, height * 0.25),
                   child: Image.asset(
-                    'assets/images/warehouse.png',
+                    'assets/images/warehousenew.png',
                     fit: BoxFit.cover,
                     alignment: Alignment.center,
                   ),

@@ -42,6 +42,7 @@ class InventoryService {
                 'merchant_id',
                 'local_qty',
                 'state',
+                'reorder_qty',
               ],
               'limit': 10,
             },

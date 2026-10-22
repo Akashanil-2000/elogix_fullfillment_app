@@ -32,7 +32,7 @@ class AppBottomNavigation extends StatelessWidget {
             icon: Icons.receipt_long_outlined,
             label: 'Orders',
             index: 1,
-            route: null,
+            route: AppRoutes.orders,
           ),
 
           _buildItem(

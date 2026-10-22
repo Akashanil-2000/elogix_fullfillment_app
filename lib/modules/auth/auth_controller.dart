@@ -10,6 +10,59 @@ class AuthController extends GetxController {
 
   final isLoading = false.obs;
 
+  final isEmailLoading = false.obs;
+  final validatedEmail = ''.obs;
+  final validatedName = ''.obs;
+
+  Future<void> validateEmail(String email) async {
+    final normalizedEmail = email.trim();
+
+    if (normalizedEmail.isEmpty) {
+      Get.snackbar(
+        'Email',
+        'Please enter your email address',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return;
+    }
+
+    if (!GetUtils.isEmail(normalizedEmail)) {
+      Get.snackbar(
+        'Email',
+        'Please enter a valid email address',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return;
+    }
+
+    try {
+      isEmailLoading.value = true;
+
+      final result = await _authService.validateEmail(email: normalizedEmail);
+
+      if (result.success) {
+        validatedEmail.value = normalizedEmail;
+        validatedName.value = result.name ?? '';
+
+        Get.toNamed(AppRoutes.password);
+      } else {
+        Get.snackbar(
+          'Email Not Recognized',
+          result.message,
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      }
+    } catch (e) {
+      Get.snackbar(
+        'Connection Error',
+        'Unable to validate your email. Please try again.',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } finally {
+      isEmailLoading.value = false;
+    }
+  }
+
   Future<void> login({
     required String username,
     required String password,
@@ -45,9 +98,14 @@ class AuthController extends GetxController {
           userId: userId,
           username: username.trim(),
           password: password,
+          name: validatedName.value,
         );
 
-        await AuthStorage.saveLogin(userId: userId, username: username.trim());
+        await AuthStorage.saveLogin(
+          userId: userId,
+          username: username.trim(),
+          password: password,
+        );
 
         Get.offAllNamed(AppRoutes.dashboard);
       } else {
@@ -73,6 +131,6 @@ class AuthController extends GetxController {
 
     await AuthStorage.clear();
 
-    Get.offAllNamed(AppRoutes.login);
+    Get.offAllNamed(AppRoutes.email);
   }
 }

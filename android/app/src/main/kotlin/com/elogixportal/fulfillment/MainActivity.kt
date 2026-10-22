@@ -1,4 +1,4 @@
-package com.example.elogix_fullfillment_app
+package com.elogixportal.fulfillment
 
 import io.flutter.embedding.android.FlutterActivity
 

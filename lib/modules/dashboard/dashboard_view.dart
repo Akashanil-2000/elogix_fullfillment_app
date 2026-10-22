@@ -1,6 +1,7 @@
 import 'package:elogix_fullfillment_app/core/routes/app_routes.dart';
 import 'package:elogix_fullfillment_app/core/widgets/app_bottom_navigation.dart';
 import 'package:elogix_fullfillment_app/modules/auth/auth_controller.dart';
+import 'package:elogix_fullfillment_app/modules/auth/auth_session.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -127,10 +128,12 @@ class DashboardView extends GetView<DashboardController> {
   // ============================================================
 
   Widget _buildGreeting() {
-    return const Column(
+    final String? displayName = AuthSession.name;
+
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
+        const Text(
           'Good Morning,',
           style: TextStyle(
             color: AppColors.textSecondary,
@@ -138,22 +141,20 @@ class DashboardView extends GetView<DashboardController> {
             fontWeight: FontWeight.w500,
           ),
         ),
-
-        SizedBox(height: 2),
-
+        const SizedBox(height: 2),
         Text(
-          'User',
-          style: TextStyle(
+          (displayName != null && displayName.isNotEmpty)
+              ? displayName
+              : 'User',
+          style: const TextStyle(
             color: AppColors.textPrimary,
             fontSize: 22,
             fontWeight: FontWeight.w700,
             height: 1.1,
           ),
         ),
-
-        SizedBox(height: 4),
-
-        Text(
+        const SizedBox(height: 4),
+        const Text(
           "Here's your fulfillment overview",
           style: TextStyle(color: AppColors.textSecondary, fontSize: 12),
         ),
@@ -175,7 +176,7 @@ class DashboardView extends GetView<DashboardController> {
           children: [
             Positioned.fill(
               child: Image.asset(
-                'assets/images/warehouse.png',
+                'assets/images/warehousenew.png',
                 fit: BoxFit.cover,
                 alignment: Alignment.center,
               ),
@@ -279,7 +280,9 @@ class DashboardView extends GetView<DashboardController> {
           icon: Icons.local_shipping_outlined,
           title: 'Orders',
           subtitle: '& Shipments',
-          onTap: () {},
+          onTap: () {
+            Get.toNamed(AppRoutes.orders);
+          },
         ),
 
         _buildFeatureCard(

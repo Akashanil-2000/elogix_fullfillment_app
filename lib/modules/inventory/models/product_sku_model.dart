@@ -7,6 +7,7 @@ class ProductSkuModel {
   final int? merchantId;
   final String merchantName;
   final double localQty;
+  final double reorderQty;
   final String state;
 
   const ProductSkuModel({
@@ -16,6 +17,7 @@ class ProductSkuModel {
     required this.merchantId,
     required this.merchantName,
     required this.localQty,
+    required this.reorderQty,
     required this.state,
   });
 
@@ -27,6 +29,7 @@ class ProductSkuModel {
       merchantId: JsonParser.many2OneId(json['merchant_id']),
       merchantName: JsonParser.many2OneName(json['merchant_id']),
       localQty: JsonParser.decimal(json['local_qty']),
+      reorderQty: JsonParser.decimal(json['reorder_qty']),
       state: JsonParser.string(json['state']),
     );
   }
