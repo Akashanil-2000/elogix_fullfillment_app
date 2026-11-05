@@ -105,6 +105,7 @@ class AuthController extends GetxController {
           userId: userId,
           username: username.trim(),
           password: password,
+          name: validatedName.value,
         );
 
         Get.offAllNamed(AppRoutes.dashboard);

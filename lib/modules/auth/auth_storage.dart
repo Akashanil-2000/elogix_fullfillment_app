@@ -7,6 +7,7 @@ class AuthStorage {
   static const String _userIdKey = 'user_id';
   static const String _usernameKey = 'username';
   static const String _passwordKey = 'password';
+  static const String _nameKey = 'name';
 
   static const FlutterSecureStorage _secureStorage = FlutterSecureStorage();
 
@@ -14,11 +15,18 @@ class AuthStorage {
     required int userId,
     required String username,
     required String password,
+    String? name,
   }) async {
     final prefs = await SharedPreferences.getInstance();
 
     await prefs.setInt(_userIdKey, userId);
     await prefs.setString(_usernameKey, username);
+
+    if (name != null && name.isNotEmpty) {
+      await prefs.setString(_nameKey, name);
+    } else {
+      await prefs.remove(_nameKey);
+    }
 
     await _secureStorage.write(key: _passwordKey, value: password);
   }
@@ -31,6 +39,11 @@ class AuthStorage {
   static Future<String?> getUsername() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString(_usernameKey);
+  }
+
+  static Future<String?> getName() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_nameKey);
   }
 
   static Future<String?> getPassword() async {
@@ -49,6 +62,7 @@ class AuthStorage {
 
     await prefs.remove(_userIdKey);
     await prefs.remove(_usernameKey);
+    await prefs.remove(_nameKey);
 
     await _secureStorage.delete(key: _passwordKey);
   }
